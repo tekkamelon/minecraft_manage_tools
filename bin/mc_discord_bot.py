@@ -26,13 +26,27 @@ async def on_ready():
 async def start_mc(ctx):
     try:
         subprocess.run(
-            # サーバー起動用のbash
-            ['bash', '/home/tekkamelon/Documents/github/bin/tmux_mc.sh'],
+            # サーバー起動用のシェルスクリプト
+            ['bash', '/home/tekkamelon/Documents/script/mc_start.sh'],
             check=True
         )
         await ctx.send('マインクラフトサーバーを起動しました！')
     except subprocess.CalledProcessError as e:
-        await ctx.send(f'エラーが発生しました: {str(e)}')
+        await ctx.send(f'起動時にエラーが発生しました: {str(e)}')
+
+# !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
+@bot.command(name='stopmc')
+@commands.has_role('@everyone')
+async def stop_mc(ctx):
+    try:
+        subprocess.run(
+            # サーバー停止用のシェルスクリプト
+            ['bash', '/home/tekkamelon/Documents/script/mc_stop.sh'],
+            check=True
+        )
+        await ctx.send('マインクラフトサーバーを停止しました！')
+    except subprocess.CalledProcessError as e:
+        await ctx.send(f'停止時にエラーが発生しました: {str(e)}')
 
 bot.run(
     'YOUR_DISCORD_BOT_TOKEN'
