@@ -28,7 +28,7 @@ if pgrep -f "java.*server.jar" > /dev/null; then
 else
 
 	# セッション内でコマンドを実行
-	tmux send-keys -t "${session_name}" "cd ~/Minecraft && java -Xmx${ram_size} -Xms${ram_size} -jar server.jar nogui" C-m
+	tmux send-keys -t "${session_name}" "java -Xmx${ram_size} -Xms${ram_size} -jar server.jar nogui" C-m
 
 fi
 

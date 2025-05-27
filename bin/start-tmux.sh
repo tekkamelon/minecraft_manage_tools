@@ -15,6 +15,8 @@ export HOME=/home/tekkamelon
 /usr/bin/tmux new-session -d -s bot
 /usr/bin/tmux new-session -d -s edit
 
+# マインクラフトサーバーのセッションでの作業ディレクトリを設定
+tmux send-keys -t minecraft "cd /home/tekkamelon/Minecraft" C-m
 # discord botを起動
 tmux send-keys -t bot "mc_discord_bot.py" C-m
 
