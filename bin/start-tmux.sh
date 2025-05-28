@@ -1,6 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-set -x
+set -eu
+set -xv
 
 # 環境変数を設定
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/tekkamelon/.local/bin
@@ -10,10 +11,14 @@ export HOME=/home/tekkamelon
 # tmuxを起動
 /usr/bin/tmux start-server
 
-# セッションを作成
-/usr/bin/tmux new-session -d -s minecraft 2>> /tmp/tmux-mysession-error.log
-/usr/bin/tmux new-session -d -s bot
-/usr/bin/tmux new-session -d -s edit
+# セッションを作成,エラー出力のみをログに出力
+{ 
+
+	/usr/bin/tmux new-session -d -s minecraft 
+	/usr/bin/tmux new-session -d -s bot
+	/usr/bin/tmux new-session -d -s edit
+
+} 2>> /tmp/tmux-mysession-error.log
 
 # マインクラフトサーバーのセッションでの作業ディレクトリを設定
 tmux send-keys -t minecraft "cd /home/tekkamelon/Minecraft" C-m
