@@ -6,8 +6,10 @@ import subprocess
 
 
 # intentの設定
+# BotがDiscordから受け取る情報を明示
 intents = discord.Intents.default()
-intents.message_content = True  # メッセージの内容を読み取るために必要です
+# メッセージの内容を読み取るために必要
+intents.message_content = True
 
 # Botの初期化時にintentsを指定
 bot = commands.Bot(command_prefix='!', intents=intents)
@@ -23,6 +25,7 @@ async def on_ready():
 @bot.command(name='startmc')
 # サーバーの全員に許可
 @commands.has_role('@everyone')
+# !startmcコマンドを定義
 async def start_mc(ctx):
     try:
         subprocess.run(
@@ -31,12 +34,14 @@ async def start_mc(ctx):
             check=True
         )
         await ctx.send('マインクラフトサーバーを起動しました！')
-    except subprocess.CalledProcessError as e:
-        await ctx.send(f'起動時にエラーが発生しました: {str(e)}')
+    except subprocess.CalledProcessError as bash_error:
+        await ctx.send(f'起動時にエラーが発生しました: {str(bash_error)}')
+
 
 # !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
 @bot.command(name='stopmc')
 @commands.has_role('@everyone')
+# !stopmcコマンドを定義
 async def stop_mc(ctx):
     try:
         subprocess.run(
@@ -45,8 +50,8 @@ async def stop_mc(ctx):
             check=True
         )
         await ctx.send('マインクラフトサーバーを停止しました！')
-    except subprocess.CalledProcessError as e:
-        await ctx.send(f'停止時にエラーが発生しました: {str(e)}')
+    except subprocess.CalledProcessError as bash_error:
+        await ctx.send(f'停止時にエラーが発生しました: {str(bash_error)}')
 
 bot.run(
     'YOUR_DISCORD_BOT_TOKEN'
