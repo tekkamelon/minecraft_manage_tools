@@ -31,7 +31,7 @@ async def start_mc(ctx):
         subprocess.run(
             # サーバー起動用のシェルスクリプト
             ['bash', '/home/tekkamelon/Documents/script/mc_start.sh'],
-            check=True
+            check=True,
             # 標準出力,標準エラー出力をキャプチャ
             capture_output=True,
             # 出力を文字列として扱う
@@ -53,7 +53,7 @@ async def stop_mc(ctx):
         subprocess.run(
             # サーバー停止用のシェルスクリプト
             ['bash', '/home/tekkamelon/Documents/script/mc_stop.sh'],
-            check=True
+            check=True,
             capture_output=True,
             text=True
         )
