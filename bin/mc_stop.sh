@@ -1,24 +1,27 @@
 #!/bin/sh 
 
 set -eu
-set -xv
+# set -xv
 
-# セッション名
-session_name="minecraft"
+# ログイン中のプレイヤー
+player=$(rcon-cli "list" | awk -F ': ' '{print $2}')
 
-# "minecraft"セッションの有無を確認
-if tmux has-session -t "${session_name}" 2>/dev/null; then
+# マイクラサーバーが停止していれば真
+if ! pgrep -f "java.*server.jar" > /dev/null; then
 
-    # セッションが存在する場合の処理
-	# マインクラフトサーバーに"stop"コマンドを送る
-    tmux send-keys -t "${session_name}" "stop" C-m
+	echo "マインクラフトサーバーは既に停止しています" 1>&2
+
+# ログインしているプレイヤーがいない場合
+elif [ -n "${player}" ]; then
+
+	# エラーメッセージとプレイヤーを出力
+	{ echo "サーバーにログイン中のプレイヤーがいます" ; rcon-cli "list" ; } 1>&2
+	exit 1
 
 else
 
-    # セッションが存在しない場合はエラーメッセージを出力
-    echo "セッション '${session_name}' が見つかりません。" 1>&2
-
-    exit 1
+	# マインクラフトサーバーに"stop"コマンドを送る
+    rcon-cli "stop"
 
 fi
 
