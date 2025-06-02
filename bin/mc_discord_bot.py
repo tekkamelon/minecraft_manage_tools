@@ -32,10 +32,16 @@ async def start_mc(ctx):
             # サーバー起動用のシェルスクリプト
             ['bash', '/home/tekkamelon/Documents/script/mc_start.sh'],
             check=True
+            # 標準出力,標準エラー出力をキャプチャ
+            capture_output=True,
+            # 出力を文字列として扱う
+            text=True
         )
         await ctx.send('マインクラフトサーバーを起動しました！')
     except subprocess.CalledProcessError as bash_error:
-        await ctx.send(f'起動時にエラーが発生しました: {str(bash_error)}')
+        # エラーメッセージにコードブロックを使用
+        error_message = f'起動時にエラーが発生しました:\n```{bash_error.stderr}```'
+        await ctx.send(error_message)
 
 
 # !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
@@ -48,10 +54,13 @@ async def stop_mc(ctx):
             # サーバー停止用のシェルスクリプト
             ['bash', '/home/tekkamelon/Documents/script/mc_stop.sh'],
             check=True
+            capture_output=True,
+            text=True
         )
         await ctx.send('マインクラフトサーバーを停止しました！')
     except subprocess.CalledProcessError as bash_error:
-        await ctx.send(f'停止時にエラーが発生しました: {str(bash_error)}')
+        error_message = f'停止時にエラーが発生しました:\n```{bash_error.stderr}```'
+        await ctx.send(error_message)
 
 bot.run(
     'YOUR_DISCORD_BOT_TOKEN'
