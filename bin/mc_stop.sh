@@ -1,7 +1,6 @@
 #!/bin/sh 
 
 set -u
-# set -xv
 
 # マイクラサーバーのプロセスを取得
 mc_proc=$(pgrep -f "java.*server.jar")
@@ -15,6 +14,7 @@ set -u
 if [ -z "${mc_proc}" ]; then
 
 	echo "マインクラフトサーバーは既に停止しています" 1>&2
+	exit 1
 
 # ログインしているプレイヤーがいない場合
 elif [ -n "${player}" ]; then
