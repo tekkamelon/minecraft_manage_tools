@@ -1,19 +1,20 @@
 #!/bin/sh 
 
-set -eu
-set -xv
+set -u
 
 # セッション名
 session_name="minecraft"
 # 起動時RAMサイズ
 ram_size="12G"
 # マイクラサーバーのプロセスを取得
-mc_proc=$(pgrep -f "java.*server.jar" )
+mc_proc=$(pgrep -f "java.*server.jar")
+
+set -e
 
 # セッションをデタッチ状態で起動,既にセッションがあれば何もしない
 if tmux has-session -t "${session_name}" 2>/dev/null ; then
 
-	echo "セッション ${session_name} は既に存在します"
+	:
 
 else
 
