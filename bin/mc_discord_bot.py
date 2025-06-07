@@ -62,6 +62,29 @@ async def stop_mc(ctx):
         error_message = f'停止時にエラーが発生しました:\n```{bash_error.stderr}```'
         await ctx.send(error_message)
 
+
+# !status コマンドでサーバーの状態を取得するシェルスクリプトを起動
+@bot.command(name='status')
+@commands.has_role('@everyone')
+# !statusコマンドを定義
+async def status_mc(ctx):
+    try:
+        # シェルスクリプトの実行結果を取得
+        result = subprocess.run(
+            # サーバー状態取得用のシェルスクリプト
+            ['bash', '/home/tekkamelon/Documents/script/mc_status.sh'],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        # 出力にコードブロックを使用
+        await ctx.send(f'```{result.stdout}```')
+    except subprocess.CalledProcessError as bash_error:
+        error_message = f'状態取得時にエラーが発生しました:\n```{bash_error.stderr}```'
+        await ctx.send(error_message)
+
+# Botの起動
+# 'YOUR_DISCORD_BOT_TOKEN'にDiscord Botのトークンを入れる
 bot.run(
     'YOUR_DISCORD_BOT_TOKEN'
 )
