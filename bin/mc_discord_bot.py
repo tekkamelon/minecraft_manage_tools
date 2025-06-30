@@ -77,8 +77,7 @@ async def status_mc(ctx):
             capture_output=True,
             text=True
         )
-        # 出力にコードブロックを使用
-        await ctx.send(f'```{result.stdout}```')
+        await ctx.send(f'{result.stdout}')
     except subprocess.CalledProcessError as bash_error:
         error_message = f'状態取得時にエラーが発生しました:\n```{bash_error.stderr}```'
         await ctx.send(error_message)
