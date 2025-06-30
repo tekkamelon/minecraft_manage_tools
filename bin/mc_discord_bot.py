@@ -30,7 +30,7 @@ async def start_mc(ctx):
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
-            ['bash', '/home/tekkamelon/Documents/script/mc_start.sh'],
+            ['bash', 'mc_start.sh'],
             check=True,
             # 標準出力,標準エラー出力をキャプチャ
             capture_output=True,
@@ -52,7 +52,7 @@ async def stop_mc(ctx):
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
-            ['bash', '/home/tekkamelon/Documents/script/mc_stop.sh'],
+            ['bash', 'mc_stop.sh'],
             check=True,
             capture_output=True,
             text=True
@@ -72,7 +72,7 @@ async def status_mc(ctx):
         # シェルスクリプトの実行結果を取得
         result = subprocess.run(
             # サーバー状態取得用のシェルスクリプト
-            ['bash', '/home/tekkamelon/Documents/script/mc_status.sh'],
+            ['bash', 'mc_status.sh'],
             check=True,
             capture_output=True,
             text=True
