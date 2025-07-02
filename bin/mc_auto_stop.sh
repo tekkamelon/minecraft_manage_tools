@@ -24,7 +24,7 @@ if ! pgrep -f "java.*server.jar" > /dev/null; then
 else
 
 	# 現在ログイン中のプレイヤー数を取得
-	player_count=$(rcon-cli "list" | grep -F "There are" | cut -d ' ' -f3)
+	player_count="$(rcon-cli "list" | grep -F "There are" | cut -d ' ' -f3)"
 
 fi
 # ===== 変数の設定ここまで =====
@@ -43,13 +43,13 @@ if [ "${player_count}" -le 0 ]; then
     else
 
         # タイムスタンプファイルから開始時間を読み込む
-        start_time=$(cat "${timestamp_file}")
+        start_time="$(cat "${timestamp_file}")"
 		
 		# 現在の時刻を取得
-        current_time=$(date +%s)
+        current_time="$(date +%s)"
 
         # 経過時間を計算
-        elapsed_time=$((current_time - start_time))
+        elapsed_time="$((current_time - start_time))"
 
         # 経過時間が3600秒 (60分) を超えているか確認
         if [ "${elapsed_time}" -gt 3600 ]; then
