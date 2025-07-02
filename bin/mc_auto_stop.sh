@@ -6,9 +6,6 @@ set -u
 # 自作コマンドのPATHを通す
 export PATH="${PATH}":/home/tekkamelon/.local/bin/
 
-# ログファイルのパス
-log_file="/home/tekkamelon/Minecraft/logs/latest.log"
-
 # Discord WebhookのURL
 discord_webhook_url="YOU_DISCORD_WEBHOOK_URL"
 
@@ -30,14 +27,6 @@ else
 	player_count=$(rcon-cli "list" | grep -F "There are" | cut -d ' ' -f3)
 
 fi
-
-# ログファイルが存在するか確認
-if [ ! -f "${log_file}" ]; then
-
-    echo "エラー: ログファイルが見つかりません,パスを確認してください: ${log_file}" >&2
-    exit 1
-
-fi
 # ===== 変数の設定ここまで =====
 
 
@@ -50,10 +39,13 @@ if [ "${player_count}" -le 0 ]; then
         echo "プレイヤーが0人になったため、自動停止の監視を開始します。"
         date +%s > "${timestamp_file}"
 
+	# タイムスタンプファイルが存在する場合
     else
 
         # タイムスタンプファイルから開始時間を読み込む
         start_time="${timestamp_file}"
+		
+		# 現在の時刻を取得
         current_time=$(date +%s)
 
         # 経過時間を計算
