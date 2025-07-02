@@ -10,7 +10,10 @@ export PATH="${PATH}":/home/tekkamelon/.local/bin/
 log_file="/home/tekkamelon/Minecraft/logs/latest.log"
 
 # Discord WebhookのURL
-discord_webhook_url="YOUR_DISCORD_WEBHOOK_URL"
+discord_webhook_url="YOU_DISCORD_WEBHOOK_URL"
+
+# Discord Botの名前
+bot_name="minecraft_manager"
 
 # プレイヤーがいない状態の開始時間を記録するタイムスタンプファイルのパス
 timestamp_file="/tmp/minecraft_empty_since"
@@ -65,8 +68,15 @@ if [ "${player_count}" -le 0 ]; then
             # サーバー停止 (このスクリプトと同じディレクトリにあるmc_stop.shを実行)
             mc_stop.sh
 
-            # Discord Webhookでメッセージを送信
-            curl -H "Content-Type: application/json" -X POST -d "{\"content\":\"${message}\"}" "${discord_webhook_url}"
+            # Discord WebhookでメッセージをPOST
+			curl -X POST  "${discord_webhook_url}" -H "Content-Type: application/json" -d @- <<-EOS
+				{
+
+					"username": "${bot_name}",
+					"content": "${message}"
+
+				}
+			EOS
 
             # タイムスタンプファイルを削除
             rm -f "${timestamp_file}"
