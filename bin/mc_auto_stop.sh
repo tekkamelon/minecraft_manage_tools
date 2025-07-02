@@ -43,7 +43,7 @@ if [ "${player_count}" -le 0 ]; then
     else
 
         # タイムスタンプファイルから開始時間を読み込む
-        start_time="${timestamp_file}"
+        start_time=$(cat "${timestamp_file}")
 		
 		# 現在の時刻を取得
         current_time=$(date +%s)
@@ -52,7 +52,7 @@ if [ "${player_count}" -le 0 ]; then
         elapsed_time=$((current_time - start_time))
 
         # 経過時間が3600秒 (60分) を超えているか確認
-        if [ ${elapsed_time} -gt 3600 ]; then
+        if [ "${elapsed_time}" -gt 3600 ]; then
 
             # Discordへ通知するメッセージ
             message="サーバーに1時間以上プレイヤー不在のため自動停止"
