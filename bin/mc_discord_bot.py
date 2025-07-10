@@ -3,6 +3,7 @@
 from discord.ext import commands
 import discord
 import subprocess
+import os
 
 
 # intentの設定
@@ -83,7 +84,15 @@ async def status_mc(ctx):
         await ctx.send(error_message)
 
 # Botの起動
-# 'YOUR_DISCORD_BOT_TOKEN'にDiscord Botのトークンを入れる
-bot.run(
-    'YOUR_DISCORD_BOT_TOKEN'
-)
+
+# 環境変数"DISCORD_BOT_TOKEN"を読み取る
+token = os.getenv('DISCORD_BOT_TOKEN')
+
+# 環境変数が設定されていなければ真
+if token is None:
+    # エラーメッセージを表示
+    print('環境変数"DISCORD_BOT_TOKEN"が設定されていません')
+    exit(1)
+else:
+    # botを起動
+    bot.run(token)

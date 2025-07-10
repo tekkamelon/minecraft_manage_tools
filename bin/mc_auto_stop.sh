@@ -6,8 +6,8 @@ set -u
 # 自作コマンドのPATHを通す
 export PATH="${PATH}":/home/tekkamelon/.local/bin/
 
-# Discord WebhookのURL
-discord_webhook_url="YOU_DISCORD_WEBHOOK_URL"
+# 環境変数"DISCORD_WEBHOOK_URL"を読み取る
+discord_webhook_url="DISCORD_WEBHOOK_URL"
 
 # Discord Botの名前
 bot_name="minecraft_manager"
