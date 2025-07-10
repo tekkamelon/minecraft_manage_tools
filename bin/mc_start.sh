@@ -6,8 +6,8 @@ set -u
 session_name="minecraft"
 # 起動時RAMサイズ
 ram_size="12G"
-# マイクラサーバーのプロセスを取得
-mc_proc=$(pgrep -f "java.*server.jar")
+# マイクラサーバーのpidファイルを指定
+mc_pid="${HOME}/Minecraft/server.pid"
 
 set -e
 
@@ -23,7 +23,7 @@ else
 fi
 
 # マイクラサーバーが起動していれば真
-if [ -n "${mc_proc}" ]; then
+if [ -f "${mc_pid}" ]; then
 
 	# マイクラサーバーが起動していればエラーメッセージを出力
     echo "マインクラフトサーバーは既に起動しています" 1>&2
