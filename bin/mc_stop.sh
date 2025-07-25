@@ -3,10 +3,10 @@
 set -u
 
 # マイクラサーバーのプロセスを取得
-mc_proc=$(pgrep -f "java.*server.jar")
+mc_proc="$(pgrep -f "java.*server.jar")"
 
 # ログイン中のプレイヤー
-player=$(rcon-cli "list" | awk -F ': ' '{print $2}')
+player="$(rcon-cli "list" | awk -F ': ' '{print $2}')"
 
 set -e
 
