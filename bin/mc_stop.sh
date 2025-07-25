@@ -2,17 +2,16 @@
 
 set -u
 
-# マイクラサーバーのpidファイルを指定
-mc_pid="${HOME}/Minecraft/server.pid"
+# マイクラサーバーのプロセスを取得
+mc_proc=$(pgrep -f "java.*server.jar")
 
 # ログイン中のプレイヤー
-player="$(rcon-cli "list" | awk -F ': ' '{print $2}')"
+player=$(rcon-cli "list" | awk -F ': ' '{print $2}')
 
 set -e
 
 # マイクラサーバーが停止していれば真
-# "server.pid"の有無で判定
-if [ -f "${mc_pid}" ]; then
+if [ -z "${mc_proc}" ]; then
 
 	echo "マインクラフトサーバーは既に停止しています" 1>&2
 	exit 1
