@@ -36,7 +36,7 @@ if [ "${player_count}" -le 0 ]; then
     # タイムスタンプファイルが存在しない場合は作成
     if [ ! -f "${timestamp_file}" ]; then
 
-        echo "プレイヤーが0人になったため、自動停止の監視を開始します。"
+        echo "プレイヤーが0人になったため自動停止の監視を開始"
         date +%s > "${timestamp_file}"
 
 	# タイムスタンプファイルが存在する場合
@@ -55,9 +55,9 @@ if [ "${player_count}" -le 0 ]; then
         if [ "${elapsed_time}" -gt 3600 ]; then
 
             # Discordへ通知するメッセージ
-            message="サーバーに1時間以上プレイヤー不在のため自動停止"
+            message="1時間以上プレイヤー不在のため自動停止"
 
-            # サーバー停止 (このスクリプトと同じディレクトリにあるmc_stop.shを実行)
+			# サーバー停止(予めmc_stop.shをパスの通ったディレクトリに配置)
             mc_stop.sh
 
             # Discord WebhookでメッセージをPOST
