@@ -4,8 +4,17 @@ set -u
 
 # マイクラサーバーのプロセスIDを取得
 mc_proc="$(pgrep -f "java.*server.jar")"
+
 # 取得したプロセスIDから起動してからの経過時間を取得,不要な空白を削除
-uptime="$(ps -p "${mc_proc}" -o etime= | tr -d ' ')"
+if [ -n "${mc_proc}" ]; then
+
+    uptime="$(ps -p "${mc_proc}" -o etime= | xargs)"
+
+else
+
+    uptime=""
+
+fi
 
 set -e
 
