@@ -4,7 +4,7 @@
 set -u
 
 # 自作コマンドのPATHを通す
-export PATH="${PATH}":/home/tekkamelon/.local/bin/
+export PATH="${PATH}":"${HOME}"/.local/bin/
 
 # 環境変数"DISCORD_WEBHOOK_URL"を読み取る
 discord_webhook_url="DISCORD_WEBHOOK_URL"
