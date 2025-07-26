@@ -20,6 +20,10 @@ is_minecraft_running() {
 if ! tmux has-session -t "${session_name}" 2>/dev/null; then
 
 	tmux new-session -d -s "${session_name}"
+
+	# マイクラサーバーの作業ディレクトリを設定
+	tmux send-keys -t "${session_name}" "cd ${HOME}/Minecraft" C-m
+
 fi
 
 # マイクラサーバーが既に起動していればエラー終了
