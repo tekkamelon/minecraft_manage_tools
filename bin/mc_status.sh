@@ -4,16 +4,13 @@ set -u
 
 # マイクラサーバーのプロセスIDを取得
 mc_proc="$(pgrep -f "java.*server.jar")"
-# 取得したプロセスIDから起動してからの経過時間を取得
-uptime_raw="$(ps -p "${mc_proc}" -o etime=)"
+# 取得したプロセスIDから起動してからの経過時間を取得,不要な空白を削除
+uptime="$(ps -p "${mc_proc}" -o etime= | tr -d ' ')"
 
 set -e
 
 # マイクラサーバーが起動していれば真
 if [ -n "${mc_proc}" ]; then
-
-	# "uptime_raw"から空白を削除
-	uptime="${uptime_raw# }"
 
 	# ログからバージョンを取得
 	version="$(grep < "${HOME}/Minecraft/logs/latest.log" -F "version" | cut -d ' ' -f7-)"
