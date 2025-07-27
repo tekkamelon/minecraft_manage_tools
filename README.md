@@ -19,8 +19,10 @@
 
 - Discordからマインクラフトサーバーを操作するスクリプトを実行
 
-    - `!startmc`: Discordから`mc_start.sh`を呼び出す
-    - `!stopmc`: Discordから`mc_stop.sh`を呼び出す
+    - `!startmc`
+        - Discordから`mc_start.sh`を呼び出す
+    - `!stopmc`
+        - Discordから`mc_stop.sh`を呼び出す
 
 ### `mc_start.sh`
 
@@ -30,6 +32,7 @@
 
 - マインクラフトサーバーのステータスを確認
 
+    - 起動からの経過時間
     - サーバーのバージョン
     - ログインプレイヤー数及びプレイヤー名
     - シード値
@@ -44,7 +47,12 @@
 
 - 以下の`tmux`セッションを起動
 
-    - マインクラフトサーバー用
-    - Discord Bot用
-    - 作業用
+    - minecraft
+        - マインクラフトサーバーを自動するためのセッション
+
+    - bot
+        - `mc_discord_bot.py`を実行するためのセッション
+
+    - edit
+        - 作業用
 
