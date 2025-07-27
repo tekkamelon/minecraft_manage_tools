@@ -1,14 +1,14 @@
 #!/bin/sh 
 
-set -u
+set -eu
 
 # マイクラサーバーのプロセスIDを取得
-mc_proc="$(pgrep -f "java.*server.jar")"
+mc_pid="$(pgrep -f "java.*server.jar" || true)"
 
 # 取得したプロセスIDから起動してからの経過時間を取得,不要な空白を削除
-if [ -n "${mc_proc}" ]; then
+if [ -n "${mc_pid}" ]; then
 
-    uptime="$(ps -p "${mc_proc}" -o etime= | xargs)"
+    uptime="$(ps -p "${mc_pid}" -o etime= | xargs || true)"
 
 else
 
@@ -16,16 +16,14 @@ else
 
 fi
 
-set -e
-
 # マイクラサーバーが起動していれば真
-if [ -n "${mc_proc}" ]; then
+if [ -n "${mc_pid}" ]; then
 
 	# ログからバージョンを取得
 	version="$(grep < "${HOME}/Minecraft/logs/latest.log" -F "version" | cut -d ' ' -f7-)"
 
 	# ログイン中のプレイヤー
-	player="$(rcon-cli "list")"
+	logged_in_players="$(rcon-cli "list")"
 
 	# シード値
 	seed="$(rcon-cli "seed")"
@@ -39,7 +37,7 @@ if [ -n "${mc_proc}" ]; then
 	### バージョン
 	${version}
 	### ログイン中のプレイヤー
-	${player}
+	${logged_in_players}
 	### シード値
 	${seed}
 	EOF
