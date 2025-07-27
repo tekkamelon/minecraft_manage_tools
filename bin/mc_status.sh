@@ -45,7 +45,7 @@ if [ -n "${mc_pid}" ]; then
 else
 
 	# エラーメッセージを出力
-	echo "Server is Down!" 1>&2
+	echo "マインクラフトサーバーは起動していません" 1>&2
 	exit 1
 
 fi
