@@ -1,13 +1,11 @@
 #!/bin/sh
 
-set -u
+set -eu
 
 # セッション名
 session_name="minecraft"
 # 起動時RAMサイズ
 ram_size="12G"
-
-set -e
 
 # マイクラサーバーのプロセスをチェックする関数
 is_minecraft_running() {

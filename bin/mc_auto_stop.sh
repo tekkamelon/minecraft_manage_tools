@@ -24,14 +24,14 @@ if ! pgrep -f "java.*server.jar" > /dev/null; then
 else
 
 	# 現在ログイン中のプレイヤー数を取得
-	player_count="$(rcon-cli "list" | grep -F "There are" | cut -d ' ' -f3)"
+	logged_in_players="$(rcon-cli "list" | grep -F "There are" | cut -d ' ' -f3)"
 
 fi
 # ===== 変数の設定ここまで =====
 
 
 # プレイヤー数が0以下であれば真
-if [ "${player_count}" -le 0 ]; then
+if [ "${logged_in_players}" -le 0 ]; then
 
     # タイムスタンプファイルが存在しない場合は作成
     if [ ! -f "${timestamp_file}" ]; then
