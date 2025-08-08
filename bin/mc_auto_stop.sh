@@ -1,13 +1,18 @@
 #!/bin/sh
 
+# shellcheck disable=SC2153,SC1091
+
 # ===== 変数の設定 =====
 set -u
 
 # 自作コマンドのPATHを通す
 export PATH="${PATH}":"${HOME}"/.local/bin/
 
+# cron用の環境変数を読み込む
+. "${HOME}"/.discord_webhook
+
 # 環境変数"DISCORD_WEBHOOK_URL"を読み取る
-discord_webhook_url="DISCORD_WEBHOOK_URL"
+discord_webhook_url="${DISCORD_WEBHOOK_URL}"
 
 # Discord Botの名前
 bot_name="minecraft_manager"
