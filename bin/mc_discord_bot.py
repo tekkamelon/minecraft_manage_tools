@@ -2,7 +2,7 @@
 
 from discord.ext import commands
 import discord
-from discord import app_commands
+# from discord import app_commands
 import subprocess
 import os
 
@@ -17,6 +17,7 @@ intents.message_content = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 
+# BOtのイベントハンドラー
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
@@ -26,9 +27,9 @@ async def on_ready():
 
 
 # コマンドの定義
-# /startmc コマンドでサーバーを起動するシェルスクリプトを起動
-@client.tree.command(name="startmc", description="マインクラフトサーバーを起動します")
-async def startmc(interaction: discord.Interaction):
+# /start コマンドでサーバーを起動するシェルスクリプトを起動
+@client.tree.command(name="start", description="マインクラフトサーバーを起動します")
+async def start(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
@@ -46,9 +47,9 @@ async def startmc(interaction: discord.Interaction):
         await interaction.response.send_message(error_message)
 
 
-# /stopmc コマンドでサーバーを停止するシェルスクリプトを起動
-@client.tree.command(name="stopmc", description="マインクラフトサーバーを停止します")
-async def stopmc(interaction: discord.Interaction):
+# /stop コマンドでサーバーを停止するシェルスクリプトを起動
+@client.tree.command(name="stop", description="マインクラフトサーバーを停止します")
+async def stop(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
