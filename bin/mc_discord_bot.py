@@ -20,7 +20,27 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
-    await bot.tree.sync()
+    # グローバル同期（時間がかかる場合あり）
+    try:
+        synced = await bot.tree.sync()
+        print(f'Synced {len(synced)} command(s) globally')
+    except Exception as e:
+        print(f'Global sync error: {e}')
+
+    # スラッシュコマンドを即座に表示させるため、ギルド限定同期を有効化してください。
+        # 以下のYOUR_GUILD_IDを実際のDiscordサーバー（ギルド）のIDに置き換えてください。
+        # ギルドIDの取得方法: Discordでサーバー名を右クリック → 'サーバー設定をコピー' → IDを確認
+        # 開発中はギルド限定同期を使用するとコマンドがすぐに表示されます。
+        # guild = discord.Object(id=YOUR_GUILD_ID)  # ← ここを実際のIDに変更
+        # synced = await bot.tree.sync(guild=guild)
+        # print(f'Synced {len(synced)} command(s) to guild')
+    
+        # テスト手順:
+        # 1. discord.pyがインストールされているか確認: pip install -U discord.py (バージョン2.0以上推奨)
+        # 2. ボットを起動し、コンソールで同期メッセージを確認
+        # 3. Discordサーバーで/start, /stop, /statusが表示されるか確認
+        # 4. コマンドを実行し、シェルスクリプトが正しく動作するかテスト
+        # 5. 問題がある場合、グローバル同期の代わりにギルド同期を有効化
 
 
 # コマンドの定義
