@@ -2,6 +2,7 @@
 
 from discord.ext import commands
 import discord
+from discord import app_commands
 import subprocess
 import os
 
@@ -19,15 +20,13 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
+    await bot.tree.sync()
 
 
 # コマンドの定義
 # !startmc コマンドでサーバーを起動するシェルスクリプトを起動
-@bot.command(name='startmc')
-# サーバーの全員に許可
-@commands.has_role('@everyone')
-# !startmcコマンドを定義
-async def start_mc(ctx):
+@app_commands.command(name="startmc", description="マインクラフトサーバーを起動します")
+async def startmc(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
@@ -38,18 +37,16 @@ async def start_mc(ctx):
             # 出力を文字列として扱う
             text=True
         )
-        await ctx.send('マインクラフトサーバーを起動しました！')
+        await interaction.response.send_message('マインクラフトサーバーを起動しました！')
     except subprocess.CalledProcessError as bash_error:
         # エラーメッセージにコードブロックを使用
         error_message = f'起動時にエラーが発生しました:\n```{bash_error.stderr}```'
-        await ctx.send(error_message)
+        await interaction.response.send_message(error_message)
 
 
 # !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
-@bot.command(name='stopmc')
-@commands.has_role('@everyone')
-# !stopmcコマンドを定義
-async def stop_mc(ctx):
+@app_commands.command(name="stopmc", description="マインクラフトサーバーを停止します")
+async def stopmc(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
@@ -58,17 +55,15 @@ async def stop_mc(ctx):
             capture_output=True,
             text=True
         )
-        await ctx.send('マインクラフトサーバーを停止しました！')
+        await interaction.response.send_message('マインクラフトサーバーを停止しました！')
     except subprocess.CalledProcessError as bash_error:
         error_message = f'停止時にエラーが発生しました:\n```{bash_error.stderr}```'
-        await ctx.send(error_message)
+        await interaction.response.send_message(error_message)
 
 
 # !status コマンドでサーバーの状態を取得するシェルスクリプトを起動
-@bot.command(name='status')
-@commands.has_role('@everyone')
-# !statusコマンドを定義
-async def status_mc(ctx):
+@app_commands.command(name="status", description="マインクラフトサーバーの状態を取得します")
+async def status(interaction: discord.Interaction):
     try:
         # シェルスクリプトの実行結果を取得
         result = subprocess.run(
@@ -78,10 +73,10 @@ async def status_mc(ctx):
             capture_output=True,
             text=True
         )
-        await ctx.send(f'{result.stdout}')
+        await interaction.response.send_message(f'{result.stdout}')
     except subprocess.CalledProcessError as bash_error:
         error_message = f'状態取得時にエラーが発生しました:\n```{bash_error.stderr}```'
-        await ctx.send(error_message)
+        await interaction.response.send_message(error_message)
 
 # Botの起動
 
