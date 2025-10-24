@@ -2,7 +2,7 @@
 
 from discord.ext import commands
 import discord
-from discord import app_commands
+from discord.ext import app_commands
 import subprocess
 import os
 
@@ -25,8 +25,8 @@ async def on_ready():
 
 # コマンドの定義
 # !startmc コマンドでサーバーを起動するシェルスクリプトを起動
-@app_commands.command(name="startmc", description="マインクラフトサーバーを起動します")
-async def startmc(interaction: discord.Interaction):
+@app_commands.command(name="start", description="マインクラフトサーバーを起動します")
+async def start(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
@@ -45,8 +45,8 @@ async def startmc(interaction: discord.Interaction):
 
 
 # !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
-@app_commands.command(name="stopmc", description="マインクラフトサーバーを停止します")
-async def stopmc(interaction: discord.Interaction):
+@app_commands.command(name="stop", description="マインクラフトサーバーを停止します")
+async def stop(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
@@ -77,6 +77,11 @@ async def status(interaction: discord.Interaction):
     except subprocess.CalledProcessError as bash_error:
         error_message = f'状態取得時にエラーが発生しました:\n```{bash_error.stderr}```'
         await interaction.response.send_message(error_message)
+
+# スラッシュコマンドをbot.treeに追加
+bot.tree.add_command(start)
+bot.tree.add_command(stop)
+bot.tree.add_command(status)
 
 # Botの起動
 
