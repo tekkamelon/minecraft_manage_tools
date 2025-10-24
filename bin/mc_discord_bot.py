@@ -2,6 +2,7 @@
 
 from discord.ext import commands
 import discord
+from discord import app_commands
 import subprocess
 import os
 
@@ -24,7 +25,7 @@ async def on_ready():
 
 # コマンドの定義
 # !startmc コマンドでサーバーを起動するシェルスクリプトを起動
-@client.slash_command(name="startmc", description="マインクラフトサーバーを起動します")
+@app_commands.command(name="startmc", description="マインクラフトサーバーを起動します")
 async def startmc(interaction: discord.Interaction):
     try:
         subprocess.run(
@@ -44,7 +45,7 @@ async def startmc(interaction: discord.Interaction):
 
 
 # !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
-@client.slash_command(name="stopmc", description="マインクラフトサーバーを停止します")
+@app_commands.command(name="stopmc", description="マインクラフトサーバーを停止します")
 async def stopmc(interaction: discord.Interaction):
     try:
         subprocess.run(
@@ -61,7 +62,7 @@ async def stopmc(interaction: discord.Interaction):
 
 
 # !status コマンドでサーバーの状態を取得するシェルスクリプトを起動
-@client.slash_command(name="status", description="マインクラフトサーバーの状態を取得します")
+@app_commands.command(name="status", description="マインクラフトサーバーの状態を取得します")
 async def status(interaction: discord.Interaction):
     try:
         # シェルスクリプトの実行結果を取得
