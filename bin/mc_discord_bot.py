@@ -2,7 +2,6 @@
 
 from discord.ext import commands
 import discord
-from discord import app_commands
 import subprocess
 import os
 
@@ -14,39 +13,19 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 # Botの初期化時にintentsを指定
-bot = commands.Bot(command_prefix='!', intents=intents)
+client = commands.Bot(command_prefix='!', intents=intents)
 
 
-@bot.event
+@client.event
 async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
-    # グローバル同期（時間がかかる場合あり）
-    try:
-        synced = await bot.tree.sync()
-        print(f'Synced {len(synced)} command(s) globally')
-    except Exception as e:
-        print(f'Global sync error: {e}')
-
-    # スラッシュコマンドを即座に表示させるため、ギルド限定同期を有効化してください。
-        # 以下のYOUR_GUILD_IDを実際のDiscordサーバー（ギルド）のIDに置き換えてください。
-        # ギルドIDの取得方法: Discordでサーバー名を右クリック → 'サーバー設定をコピー' → IDを確認
-        # 開発中はギルド限定同期を使用するとコマンドがすぐに表示されます。
-        # guild = discord.Object(id=YOUR_GUILD_ID)  # ← ここを実際のIDに変更
-        # synced = await bot.tree.sync(guild=guild)
-        # print(f'Synced {len(synced)} command(s) to guild')
-    
-        # テスト手順:
-        # 1. discord.pyがインストールされているか確認: pip install -U discord.py (バージョン2.0以上推奨)
-        # 2. ボットを起動し、コンソールで同期メッセージを確認
-        # 3. Discordサーバーで/start, /stop, /statusが表示されるか確認
-        # 4. コマンドを実行し、シェルスクリプトが正しく動作するかテスト
-        # 5. 問題がある場合、グローバル同期の代わりにギルド同期を有効化
+    print(f'{client.user} has connected to Discord!')
+    await client.tree.sync()
 
 
 # コマンドの定義
 # !startmc コマンドでサーバーを起動するシェルスクリプトを起動
-@app_commands.command(name="start", description="マインクラフトサーバーを起動します")
-async def start(interaction: discord.Interaction):
+@client.slash_command(name="startmc", description="マインクラフトサーバーを起動します")
+async def startmc(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
@@ -65,8 +44,8 @@ async def start(interaction: discord.Interaction):
 
 
 # !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
-@app_commands.command(name="stop", description="マインクラフトサーバーを停止します")
-async def stop(interaction: discord.Interaction):
+@client.slash_command(name="stopmc", description="マインクラフトサーバーを停止します")
+async def stopmc(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
@@ -82,7 +61,7 @@ async def stop(interaction: discord.Interaction):
 
 
 # !status コマンドでサーバーの状態を取得するシェルスクリプトを起動
-@app_commands.command(name="status", description="マインクラフトサーバーの状態を取得します")
+@client.slash_command(name="status", description="マインクラフトサーバーの状態を取得します")
 async def status(interaction: discord.Interaction):
     try:
         # シェルスクリプトの実行結果を取得
@@ -98,11 +77,6 @@ async def status(interaction: discord.Interaction):
         error_message = f'状態取得時にエラーが発生しました:\n```{bash_error.stderr}```'
         await interaction.response.send_message(error_message)
 
-# スラッシュコマンドをbot.treeに追加
-bot.tree.add_command(start)
-bot.tree.add_command(stop)
-bot.tree.add_command(status)
-
 # Botの起動
 
 # 環境変数"DISCORD_BOT_TOKEN"を読み取る
@@ -115,4 +89,4 @@ if token is None:
     exit(1)
 else:
     # botを起動
-    bot.run(token)
+    client.run(token)
