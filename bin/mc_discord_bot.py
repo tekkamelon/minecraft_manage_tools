@@ -20,12 +20,14 @@ client = commands.Bot(command_prefix='!', intents=intents)
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
+    # スラッシュコマンドを同期
     await client.tree.sync()
+    print('スラッシュコマンドを同期しました')
 
 
 # コマンドの定義
-# !startmc コマンドでサーバーを起動するシェルスクリプトを起動
-@app_commands.command(name="startmc", description="マインクラフトサーバーを起動します")
+# /startmc コマンドでサーバーを起動するシェルスクリプトを起動
+@client.tree.command(name="startmc", description="マインクラフトサーバーを起動します")
 async def startmc(interaction: discord.Interaction):
     try:
         subprocess.run(
@@ -44,8 +46,8 @@ async def startmc(interaction: discord.Interaction):
         await interaction.response.send_message(error_message)
 
 
-# !stopmc コマンドでサーバーを停止するシェルスクリプトを起動
-@app_commands.command(name="stopmc", description="マインクラフトサーバーを停止します")
+# /stopmc コマンドでサーバーを停止するシェルスクリプトを起動
+@client.tree.command(name="stopmc", description="マインクラフトサーバーを停止します")
 async def stopmc(interaction: discord.Interaction):
     try:
         subprocess.run(
@@ -61,8 +63,8 @@ async def stopmc(interaction: discord.Interaction):
         await interaction.response.send_message(error_message)
 
 
-# !status コマンドでサーバーの状態を取得するシェルスクリプトを起動
-@app_commands.command(name="status", description="マインクラフトサーバーの状態を取得します")
+# /status コマンドでサーバーの状態を取得するシェルスクリプトを起動
+@client.tree.command(name="status", description="マインクラフトサーバーの状態を取得します")
 async def status(interaction: discord.Interaction):
     try:
         # シェルスクリプトの実行結果を取得
