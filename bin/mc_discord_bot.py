@@ -2,7 +2,7 @@
 
 from discord.ext import commands
 import discord
-from discord.ext import app_commands
+from discord import app_commands
 import subprocess
 import os
 
