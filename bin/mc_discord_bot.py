@@ -17,10 +17,12 @@ intents.message_content = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 
-# BOtのイベントハンドラー
+# Botのイベントハンドラー
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
+    # すべてのコマンドをクリア
+    client.tree.clear_commands(guild=None)
     # スラッシュコマンドを同期
     await client.tree.sync()
     print('スラッシュコマンドを同期しました')
