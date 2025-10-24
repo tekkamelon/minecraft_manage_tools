@@ -2,7 +2,6 @@
 
 from discord.ext import commands
 import discord
-# from discord import app_commands
 import subprocess
 import os
 
@@ -19,6 +18,7 @@ client = commands.Bot(command_prefix='!', intents=intents)
 
 # Botのイベントハンドラー
 @client.event
+# BotがDiscordサーバーに接続したことをコンソールに表示
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
 
@@ -86,6 +86,7 @@ async def status(interaction: discord.Interaction):
             ['bash', 'mc_status.sh'],
             check=True,
             capture_output=True,
+            # シェルスクリプトの実行結果をDiscordメッセージとして送信
             text=True
         )
         await interaction.response.send_message(f'{result.stdout}')
@@ -94,7 +95,6 @@ async def status(interaction: discord.Interaction):
         await interaction.response.send_message(error_message)
 
 # Botの起動
-
 # 環境変数"DISCORD_BOT_TOKEN"を読み取る
 token = os.getenv('DISCORD_BOT_TOKEN')
 
@@ -102,6 +102,7 @@ token = os.getenv('DISCORD_BOT_TOKEN')
 if token is None:
     # エラーメッセージを表示
     print('環境変数"DISCORD_BOT_TOKEN"が設定されていません')
+    # 環境変数から取得したトークンを使用してBotを起動
     exit(1)
 else:
     # botを起動
