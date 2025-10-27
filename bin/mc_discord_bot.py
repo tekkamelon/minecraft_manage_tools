@@ -42,6 +42,14 @@ async def on_ready():
 # /start コマンドでサーバーを起動するシェルスクリプトを起動
 @client.tree.command(name="start", description="マインクラフトサーバーを起動します")
 async def start(interaction: discord.Interaction):
+    # ロールチェック
+    crafter_role = discord.utils.get(interaction.user.roles, name="crafter")
+    if not crafter_role:
+        await interaction.response.send_message(
+            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
+        )
+        return
+
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
@@ -62,6 +70,14 @@ async def start(interaction: discord.Interaction):
 # /stop コマンドでサーバーを停止するシェルスクリプトを起動
 @client.tree.command(name="stop", description="マインクラフトサーバーを停止します")
 async def stop(interaction: discord.Interaction):
+    # ロールチェック
+    crafter_role = discord.utils.get(interaction.user.roles, name="crafter")
+    if not crafter_role:
+        await interaction.response.send_message(
+            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
+        )
+        return
+
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
@@ -79,6 +95,14 @@ async def stop(interaction: discord.Interaction):
 # /status コマンドでサーバーの状態を取得するシェルスクリプトを起動
 @client.tree.command(name="status", description="マインクラフトサーバーの状態を取得します")
 async def status(interaction: discord.Interaction):
+    # ロールチェック
+    crafter_role = discord.utils.get(interaction.user.roles, name="crafter")
+    if not crafter_role:
+        await interaction.response.send_message(
+            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
+        )
+        return
+
     try:
         # シェルスクリプトの実行結果を取得
         result = subprocess.run(
