@@ -6,6 +6,9 @@ import subprocess
 import os
 
 
+# ロール"crafter"を環境変数化
+MINECRAFT_ROLE = os.getenv('MINECRAFT_ROLE', 'crafter')
+
 # intentの設定
 # BotがDiscordから受け取る情報を明示
 intents = discord.Intents.default()
@@ -43,7 +46,9 @@ async def on_ready():
 @client.tree.command(name="start", description="マインクラフトサーバーを起動します")
 async def start(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(interaction.user.roles, name="crafter")
+    crafter_role = discord.utils.get(
+        interaction.user.roles, name=MINECRAFT_ROLE
+    )
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
@@ -71,7 +76,9 @@ async def start(interaction: discord.Interaction):
 @client.tree.command(name="stop", description="マインクラフトサーバーを停止します")
 async def stop(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(interaction.user.roles, name="crafter")
+    crafter_role = discord.utils.get(
+        interaction.user.roles, name=MINECRAFT_ROLE
+    )
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
@@ -96,7 +103,9 @@ async def stop(interaction: discord.Interaction):
 @client.tree.command(name="status", description="マインクラフトサーバーの状態を取得します")
 async def status(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(interaction.user.roles, name="crafter")
+    crafter_role = discord.utils.get(
+        interaction.user.roles, name=MINECRAFT_ROLE
+    )
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
