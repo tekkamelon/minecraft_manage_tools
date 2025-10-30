@@ -49,12 +49,14 @@ async def start(interaction: discord.Interaction):
     crafter_role = discord.utils.get(
         interaction.user.roles, name=MINECRAFT_ROLE
     )
+    # ロールがなければエラーメッセージを出力
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
         )
         return
 
+    # エラー発生時に"except"ブロックを実行
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
@@ -66,6 +68,7 @@ async def start(interaction: discord.Interaction):
             text=True
         )
         await interaction.response.send_message('マインクラフトサーバーを起動しました！')
+    # シェルスクリプトの実行時にエラーが発生した場合の処理
     except subprocess.CalledProcessError as bash_error:
         # エラーメッセージにコードブロックを使用
         error_message = f'起動時にエラーが発生しました:\n```{bash_error.stderr}```'
