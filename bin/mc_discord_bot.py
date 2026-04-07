@@ -26,6 +26,9 @@ async def on_ready():
     print(f"{client.user} has connected to Discord!")
 
     dev_guild_id = os.getenv("DEV_GUILD_ID")
+    print(f"DEV_GUILD_ID: {dev_guild_id}")
+    print(f"Registered commands: {client.tree.get_commands()}")
+
     if dev_guild_id:
         guild = discord.Object(id=int(dev_guild_id))
         client.tree.copy_global_to(guild=guild)
@@ -42,14 +45,15 @@ async def on_ready():
         except Exception as e:
             print(f"コマンド同期エラー: {e}")
 
+    print(f"同期後のcommands: {client.tree.get_commands()}")
+
 
 # コマンドの定義
 # /start コマンドでサーバーを起動するシェルスクリプトを起動
 @client.tree.command(name="start", description="マインクラフトサーバーを起動します")
 async def start(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     # ロールがなければエラーメッセージを出力
     if not crafter_role:
         await interaction.response.send_message(
@@ -83,8 +87,7 @@ async def start(interaction: discord.Interaction):
 @client.tree.command(name="stop", description="マインクラフトサーバーを停止します")
 async def stop(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
@@ -114,8 +117,7 @@ async def stop(interaction: discord.Interaction):
 )
 async def status(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
