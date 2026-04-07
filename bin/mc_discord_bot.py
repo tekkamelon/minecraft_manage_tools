@@ -16,7 +16,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 # Botの初期化時にintentsを指定
-client = commands.Bot(intents=intents)
+client = commands.Bot(command_prefix="", intents=intents)
 
 
 # Botのイベントハンドラー
@@ -46,8 +46,7 @@ async def on_ready():
 @client.tree.command(name="start", description="マインクラフトサーバーを起動します")
 async def start(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     # ロールがなければエラーメッセージを出力
     if not crafter_role:
         await interaction.response.send_message(
@@ -81,8 +80,7 @@ async def start(interaction: discord.Interaction):
 @client.tree.command(name="stop", description="マインクラフトサーバーを停止します")
 async def stop(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
@@ -112,8 +110,7 @@ async def stop(interaction: discord.Interaction):
 )
 async def status(interaction: discord.Interaction):
     # ロールチェック
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
             "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
