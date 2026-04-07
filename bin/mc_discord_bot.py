@@ -38,7 +38,6 @@ async def on_ready():
         except Exception as e:
             print(f"コマンド同期エラー: {e}")
     else:
-        client.tree.clear_commands(guild=None)
         try:
             await client.tree.sync()
             print("スラッシュコマンドを同期しました")
