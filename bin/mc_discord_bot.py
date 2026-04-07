@@ -7,7 +7,7 @@ import os
 
 
 # ロール"crafter"を環境変数化
-MINECRAFT_ROLE = os.getenv('MINECRAFT_ROLE', 'crafter')
+MINECRAFT_ROLE = os.getenv("MINECRAFT_ROLE", "crafter")
 
 # intentの設定
 # BotがDiscordから受け取る情報を明示
@@ -16,29 +16,29 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 # Botの初期化時にintentsを指定
-client = commands.Bot(command_prefix='!', intents=intents)
+client = commands.Bot(intents=intents)
 
 
 # Botのイベントハンドラー
 @client.event
 # BotがDiscordサーバーに接続したことをコンソールに表示
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print(f"{client.user} has connected to Discord!")
 
     # 環境変数'DEV_GUILD_ID'があれば特定ギルドに即座に同期する(開発用)
-    dev_guild_id = os.getenv('DEV_GUILD_ID')
+    dev_guild_id = os.getenv("DEV_GUILD_ID")
     if dev_guild_id:
         guild = discord.Object(id=int(dev_guild_id))
         client.tree.copy_global_to(guild=guild)
         await client.tree.sync(guild=guild)
-        print(f'開発用ギルド {dev_guild_id} にコマンドを同期しました')
+        print(f"開発用ギルド {dev_guild_id} にコマンドを同期しました")
     else:
         # 環境変数が設定されていなければグローバル同期
         # すべてのコマンドをクリア
         client.tree.clear_commands(guild=None)
         # スラッシュコマンドを同期
         await client.tree.sync()
-        print('スラッシュコマンドを同期しました')
+        print("スラッシュコマンドを同期しました")
 
 
 # コマンドの定義
@@ -47,12 +47,12 @@ async def on_ready():
 async def start(interaction: discord.Interaction):
     # ロールチェック
     crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE
-    )
+        interaction.user.roles, name=MINECRAFT_ROLE)
     # ロールがなければエラーメッセージを出力
     if not crafter_role:
         await interaction.response.send_message(
-            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
+            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
+            ephemeral=True,
         )
         return
 
@@ -60,18 +60,20 @@ async def start(interaction: discord.Interaction):
     try:
         subprocess.run(
             # サーバー起動用のシェルスクリプト
-            ['bash', 'mc_start.sh'],
+            ["bash", "mc_start.sh"],
             check=True,
             # 標準出力,標準エラー出力をキャプチャ
             capture_output=True,
             # 出力を文字列として扱う
-            text=True
+            text=True,
         )
-        await interaction.response.send_message('マインクラフトサーバーを起動しました！')
+        await interaction.response.send_message(
+            "マインクラフトサーバーを起動しました！"
+        )
     # シェルスクリプトの実行時にエラーが発生した場合の処理
     except subprocess.CalledProcessError as bash_error:
         # エラーメッセージにコードブロックを使用
-        error_message = f'起動時にエラーが発生しました:\n```{bash_error.stderr}```'
+        error_message = f"起動時にエラーが発生しました:\n```{bash_error.stderr}```"
         await interaction.response.send_message(error_message)
 
 
@@ -80,38 +82,42 @@ async def start(interaction: discord.Interaction):
 async def stop(interaction: discord.Interaction):
     # ロールチェック
     crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE
-    )
+        interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
-            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
+            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
+            ephemeral=True,
         )
         return
 
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
-            ['bash', 'mc_stop.sh'],
+            ["bash", "mc_stop.sh"],
             check=True,
             capture_output=True,
-            text=True
+            text=True,
         )
-        await interaction.response.send_message('マインクラフトサーバーを停止しました！')
+        await interaction.response.send_message(
+            "マインクラフトサーバーを停止しました！"
+        )
     except subprocess.CalledProcessError as bash_error:
-        error_message = f'停止時にエラーが発生しました:\n```{bash_error.stderr}```'
+        error_message = f"停止時にエラーが発生しました:\n```{bash_error.stderr}```"
         await interaction.response.send_message(error_message)
 
 
 # /status コマンドでサーバーの状態を取得するシェルスクリプトを起動
-@client.tree.command(name="status", description="マインクラフトサーバーの状態を取得します")
+@client.tree.command(
+    name="status", description="マインクラフトサーバーの状態を取得します"
+)
 async def status(interaction: discord.Interaction):
     # ロールチェック
     crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE
-    )
+        interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
-            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。", ephemeral=True
+            "このコマンドを実行する権限がありません。'crafter'ロールが必要です。",
+            ephemeral=True,
         )
         return
 
@@ -119,20 +125,21 @@ async def status(interaction: discord.Interaction):
         # シェルスクリプトの実行結果を取得
         result = subprocess.run(
             # サーバー状態取得用のシェルスクリプト
-            ['bash', 'mc_status.sh'],
+            ["bash", "mc_status.sh"],
             check=True,
             capture_output=True,
             # シェルスクリプトの実行結果をDiscordメッセージとして送信
-            text=True
+            text=True,
         )
-        await interaction.response.send_message(f'{result.stdout}')
+        await interaction.response.send_message(f"{result.stdout}")
     except subprocess.CalledProcessError as bash_error:
-        error_message = f'状態取得時にエラーが発生しました:\n```{bash_error.stderr}```'
+        error_message = f"状態取得時にエラーが発生しました:\n```{bash_error.stderr}```"
         await interaction.response.send_message(error_message)
+
 
 # Botの起動
 # 環境変数"DISCORD_BOT_TOKEN"を読み取る
-token = os.getenv('DISCORD_BOT_TOKEN')
+token = os.getenv("DISCORD_BOT_TOKEN")
 
 # 環境変数が設定されていなければ真
 if token is None:
