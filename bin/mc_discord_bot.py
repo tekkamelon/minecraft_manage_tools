@@ -25,20 +25,22 @@ client = commands.Bot(command_prefix="", intents=intents)
 async def on_ready():
     print(f"{client.user} has connected to Discord!")
 
-    # 環境変数'DEV_GUILD_ID'があれば特定ギルドに即座に同期する(開発用)
     dev_guild_id = os.getenv("DEV_GUILD_ID")
     if dev_guild_id:
         guild = discord.Object(id=int(dev_guild_id))
         client.tree.copy_global_to(guild=guild)
-        await client.tree.sync(guild=guild)
-        print(f"開発用ギルド {dev_guild_id} にコマンドを同期しました")
+        try:
+            await client.tree.sync(guild=guild)
+            print(f"開発用ギルド {dev_guild_id} にコマンドを同期しました")
+        except Exception as e:
+            print(f"コマンド同期エラー: {e}")
     else:
-        # 環境変数が設定されていなければグローバル同期
-        # すべてのコマンドをクリア
         client.tree.clear_commands(guild=None)
-        # スラッシュコマンドを同期
-        await client.tree.sync()
-        print("スラッシュコマンドを同期しました")
+        try:
+            await client.tree.sync()
+            print("スラッシュコマンドを同期しました")
+        except Exception as e:
+            print(f"コマンド同期エラー: {e}")
 
 
 # コマンドの定義
