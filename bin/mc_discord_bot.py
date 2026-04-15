@@ -21,7 +21,9 @@ client = commands.Bot(command_prefix="", intents=intents)
 
 # 共通関数: Minecraftロールチェック
 async def check_minecraft_role(interaction: discord.Interaction) -> bool:
-    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(
+        interaction.user.roles, name=MINECRAFT_ROLE
+    )
     if not crafter_role:
         await interaction.response.send_message(
             f"このコマンドを実行する権限がありません。'{MINECRAFT_ROLE}'ロールが必要です。",
