@@ -16,13 +16,12 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 # Botの初期化時にintentsを指定
-client = commands.Bot(command_prefix="!", intents=intents)
+client = commands.Bot(command_prefix="", intents=intents)
 
 
 # 共通関数: Minecraftロールチェック
 async def check_minecraft_role(interaction: discord.Interaction) -> bool:
-    crafter_role = discord.utils.get(
-        interaction.user.roles, name=MINECRAFT_ROLE)
+    crafter_role = discord.utils.get(interaction.user.roles, name=MINECRAFT_ROLE)
     if not crafter_role:
         await interaction.response.send_message(
             f"このコマンドを実行する権限がありません。'{MINECRAFT_ROLE}'ロールが必要です。",
@@ -37,7 +36,6 @@ async def check_minecraft_role(interaction: discord.Interaction) -> bool:
 # BotがDiscordサーバーに接続したことをコンソールに表示
 async def on_ready():
     print(f"{client.user} has connected to Discord!")
-
     # 環境変数'DEV_GUILD_ID'があれば特定ギルドに即座に同期する(開発用)
     dev_guild_id = os.getenv("DEV_GUILD_ID")
     if dev_guild_id:
