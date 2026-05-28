@@ -4,8 +4,9 @@ set -eu
 
 # セッション名
 session_name="minecraft"
-# 起動時RAMサイズ
-ram_size="12G"
+# 最大ヒープサイズと初期ヒープサイズ
+mx_ram_size="12G"
+ms_ram_size="3G"
 
 # マイクラサーバーのプロセスをチェックする関数
 is_minecraft_running() {
@@ -34,7 +35,7 @@ fi
 
 # サーバー起動
 echo "マインクラフトサーバーを起動中..."
-tmux send-keys -t "${session_name}" "java -Xmx${ram_size} -Xms${ram_size} -jar server.jar nogui" C-m
+tmux send-keys -t "${session_name}" "java -Xmx${mx_ram_size} -Xms${ms_ram_size} -jar server.jar nogui" C-m
 
 # 起動待機(最大30秒)
 timeout=30
