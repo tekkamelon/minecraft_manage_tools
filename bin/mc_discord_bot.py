@@ -12,11 +12,9 @@ MINECRAFT_ROLE = os.getenv("MINECRAFT_ROLE", "crafter")
 # intentの設定
 # BotがDiscordから受け取る情報を明示
 intents = discord.Intents.default()
-# メッセージの内容を読み取るために必要
-intents.message_content = True
-
-# Botの初期化時にintentsを指定
-client = commands.Bot(command_prefix="", intents=intents)
+# スラッシュコマンドのみ使うため通常メッセージはコマンド解析しない
+# ただしBotとしては起動,メンション時のみ従来コマンドを許可
+client = commands.Bot(command_prefix=commands.when_mentioned, intents=intents)
 
 
 # 共通関数: Minecraftロールチェック
