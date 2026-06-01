@@ -26,7 +26,8 @@ if [ -n "${logged_in_players}" ]; then
 else
 
 	# マインクラフトサーバーに"stop"コマンドを送る
-	rcon-cli "stop"
+	rcon-cli "stop" &&
+	echo "マインクラフトサーバーを停止しました"
 
 fi
 
