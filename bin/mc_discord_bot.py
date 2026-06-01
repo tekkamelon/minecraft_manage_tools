@@ -59,15 +59,13 @@ async def start(interaction: discord.Interaction):
     if not await check_minecraft_role(interaction):
         return
 
-    # 実行ログをコンソールに出力
     from datetime import datetime
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     user = interaction.user
-    print(f"[{now}] /start executed by {user.name}#{user.discriminator}")
 
     # エラー発生時に"except"ブロックを実行
     try:
-        subprocess.run(
+        result = subprocess.run(
             # サーバー起動用のシェルスクリプト
             ["bash", "mc_start.sh"],
             check=True,
@@ -75,6 +73,11 @@ async def start(interaction: discord.Interaction):
             capture_output=True,
             # 出力を文字列として扱う
             text=True,
+        )
+        # 実行ログをコンソールに出力
+        print(
+            f"[{now}] /start executed by {user.name}#{user.discriminator}\n"
+            f"{result.stdout}"
         )
         await interaction.response.send_message(
             "マインクラフトサーバーを起動しました！"
@@ -95,15 +98,18 @@ async def stop(interaction: discord.Interaction):
     from datetime import datetime
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     user = interaction.user
-    print(f"[{now}] /stop executed by {user.name}#{user.discriminator}")
 
     try:
-        subprocess.run(
+        result = subprocess.run(
             # サーバー停止用のシェルスクリプト
             ["bash", "mc_stop.sh"],
             check=True,
             capture_output=True,
             text=True,
+        )
+        print(
+            f"[{now}] /stop executed by {user.name}#{user.discriminator}\n"
+            f"{result.stdout}"
         )
         await interaction.response.send_message(
             "マインクラフトサーバーを停止しました！"
@@ -124,7 +130,6 @@ async def status(interaction: discord.Interaction):
     from datetime import datetime
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     user = interaction.user
-    print(f"[{now}] /status executed by {user.name}#{user.discriminator}")
 
     try:
         # シェルスクリプトの実行結果を取得
@@ -135,6 +140,10 @@ async def status(interaction: discord.Interaction):
             capture_output=True,
             # シェルスクリプトの実行結果をDiscordメッセージとして送信
             text=True,
+        )
+        print(
+            f"[{now}] /status executed by {user.name}#{user.discriminator}\n"
+            f"{result.stdout}"
         )
         await interaction.response.send_message(f"{result.stdout}")
     except subprocess.CalledProcessError as bash_error:
