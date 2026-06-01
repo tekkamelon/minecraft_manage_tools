@@ -59,6 +59,12 @@ async def start(interaction: discord.Interaction):
     if not await check_minecraft_role(interaction):
         return
 
+    # 実行ログをコンソールに出力
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user = interaction.user
+    print(f"[{now}] /start executed by {user.name}#{user.discriminator}")
+
     # エラー発生時に"except"ブロックを実行
     try:
         subprocess.run(
@@ -86,6 +92,11 @@ async def stop(interaction: discord.Interaction):
     if not await check_minecraft_role(interaction):
         return
 
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user = interaction.user
+    print(f"[{now}] /stop executed by {user.name}#{user.discriminator}")
+
     try:
         subprocess.run(
             # サーバー停止用のシェルスクリプト
@@ -109,6 +120,11 @@ async def stop(interaction: discord.Interaction):
 async def status(interaction: discord.Interaction):
     if not await check_minecraft_role(interaction):
         return
+
+    from datetime import datetime
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user = interaction.user
+    print(f"[{now}] /status executed by {user.name}#{user.discriminator}")
 
     try:
         # シェルスクリプトの実行結果を取得
