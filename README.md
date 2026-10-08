@@ -20,9 +20,10 @@
 ### `mc_backup.sh`
 
 - マインクラフトサーバーのバックアップを実行
-- `~/Minecraft`を`~/minecraft_backups/minecraft_backup-YYYY_MM_DD_HH_MM_SS.tar.gz`として`tar -czf`で圧縮保存
+- `~/minecraft_backups`を`mkdir -p`で作成後、`~/Minecraft`を`~/minecraft_backups/minecraft_backup-YYYY_MM_DD_HH_MM_SS.tar.gz`として`tar -czf`で圧縮保存
 - 保存後に最新2世代のみ残して古いバックアップを削除(ローテーション)
-- `rei`からの`ssh`実行でも上限を保証する
+- ローテーションはglob列挙 + ファイル名降順(`sort -r`) + `tail`による選別で実施(`ls`不使用)
+- スクリプト内部で上限管理するため、`ssh`経由の実行でも世代上限を保証する
 
 ### `mc_backup_del_remote.sh`
 
@@ -34,7 +35,7 @@
 
 - ローカル(`rei`の共有ストレージ)の30日前より古いバックアップを削除
 - `rei`の`cron`から実行する事を想定
-- 対象ゼロでも誤動作しないよう`xargs -r`を使用
+- `find -type f -mtime +30 -exec rm -f -- {} +`で削除(`xargs`不使用、特殊文字名対応、対象ゼロでも正常終了)
 
 ### `mc_discord_bot.py`
 
