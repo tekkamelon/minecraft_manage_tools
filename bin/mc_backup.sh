@@ -2,14 +2,28 @@
 
 set -eu
 
-# 保持世代数 (reiからのssh実行でもここで上限を保証する)
+# ====== 変数の宣言 ======
+
 keep=2
-backup_dir="$HOME/minecraft_backups"
-mkdir -p "$backup_dir"
+backup_dir="${HOME}/minecraft_backups"
 
-tar -czf "$backup_dir/minecraft_backup-$(date "+%Y_%m_%d_%H_%M_%S").tar.gz" -C "$HOME" Minecraft
+# ====== 変数の宣言ここまで ======
 
-# ローテーション: 新しい順にkeep世代だけ残し、古いものを削除
-ls -1t "$backup_dir" | grep -E "^minecraft_backup-.*\.tar\.gz$" | tail -n +$((keep + 1)) | while IFS= read -r f; do
-  rm -f -- "$backup_dir/$f"
+# バックアップ格納先の作成
+mkdir -p "${backup_dir}"
+
+# バックアップの取得
+tar -czf "${backup_dir}/minecraft_backup-$(date "+%Y_%m_%d_%H_%M_%S").tar.gz" -C "${HOME}" Minecraft
+
+# 古い世代の削除 (ファイル名降順でのローテーション)
+for candidate in "${backup_dir}"/minecraft_backup-*.tar.gz; do
+    [ -e "${candidate}" ] || continue
+
+    case "${candidate}" in
+        "${backup_dir}"/minecraft_backup-*.tar.gz)
+            printf '%s\n' "${candidate}"
+            ;;
+    esac
+done | sort -r | tail -n +$((keep + 1)) | while IFS= read -r target; do
+    rm -f -- "${target}"
 done
