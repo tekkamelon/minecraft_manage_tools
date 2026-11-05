@@ -28,6 +28,52 @@ if [ -n "${mc_pid}" ]; then
 	# シード値
 	seed="$(rcon-cli "seed")"
 
+	# ワールドの昼夜(daytime tick)
+	# 26.1未満はtime query daytime,26.1以降はtime query minecraft:day
+	daytime_response="$(rcon-cli "time query daytime" || true)"
+	daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
+
+	# 旧構文で数値が取れなければ26.1以降の構文で再取得
+	case "${daytime}" in
+		''|*[!0-9]*)
+
+			daytime_response="$(rcon-cli "time query minecraft:day" || true)"
+			daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
+
+			;;
+	esac
+
+	# 応答末尾が数値でなければ取得失敗
+	case "${daytime}" in
+		''|*[!0-9]*) daytime="" ;;
+	esac
+
+	# daytime tickから昼夜とゲーム内時刻を算出
+	if [ -z "${daytime}" ]; then
+
+		world_time="取得できませんでした"
+
+	else
+
+		# 1日は24000tick,0が夜明け(06:00),12000が日没(18:00)
+		mc_hour="$(( (daytime / 1000 + 6) % 24 ))"
+		mc_minute="$(( (daytime % 1000) * 6 / 100 ))"
+
+		if [ "${daytime}" -lt 12000 ]; then
+
+			day_night="昼"
+
+		else
+
+			day_night="夜"
+
+		fi
+
+		world_time="$(printf '%s (ゲーム内時刻 %02d:%02d / daytime %s)' \
+			"${day_night}" "${mc_hour}" "${mc_minute}" "${daytime}")"
+
+	fi
+
 	# 出力
 	cat <<- EOF
 	## === Minecraft Server Status ===
@@ -40,6 +86,8 @@ if [ -n "${mc_pid}" ]; then
 	${logged_in_players}
 	### シード値
 	${seed}
+	### ワールドの昼夜
+	${world_time}
 	EOF
 
 else

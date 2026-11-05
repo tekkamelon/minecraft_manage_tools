@@ -71,6 +71,11 @@
     - サーバーのバージョン(`${HOME}/Minecraft/logs/latest.log`から取得)
     - ログイン中プレイヤー(`rcon-cli "list"`の結果)
     - シード値(`rcon-cli "seed"`の結果)
+    - ワールドの昼夜
+        - `rcon-cli "time query daytime"`でdaytime tickを取得,数値が取れない場合は26.1以降用の`rcon-cli "time query minecraft:day"`で再取得
+        - 0以上12000未満を`昼`,12000以上24000未満を`夜`として判定(0が夜明け06:00,12000が日没18:00)
+        - 判定に加えてゲーム内時刻(`HH:MM`)とdaytime tickを併記
+        - どちらの構文でも数値が取得できない場合は`取得できませんでした`を表示
 
 ### `mc_stop.sh`
 
