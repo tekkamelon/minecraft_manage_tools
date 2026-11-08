@@ -29,15 +29,15 @@ if [ -n "${mc_pid}" ]; then
 	seed="$(rcon-cli "seed")"
 
 	# ワールドの昼夜(daytime tick)
-	# 26.1未満はtime query daytime,26.1以降はtime query minecraft:day
-	daytime_response="$(rcon-cli "time query daytime" || true)"
+	# 26.1以降はtime query minecraft:day,26.1未満はtime query daytime
+	daytime_response="$(rcon-cli "time query minecraft:day" || true)"
 	daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
 
-	# 旧構文で数値が取れなければ26.1以降の構文で再取得
+	# 26.1以降の構文で数値が取れなければ26.1未満の構文で再取得
 	case "${daytime}" in
 		''|*[!0-9]*)
 
-			daytime_response="$(rcon-cli "time query minecraft:day" || true)"
+			daytime_response="$(rcon-cli "time query daytime" || true)"
 			daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
 
 			;;
