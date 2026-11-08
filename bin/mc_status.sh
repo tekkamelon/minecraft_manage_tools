@@ -29,8 +29,8 @@ if [ -n "${mc_pid}" ]; then
 	seed="$(rcon-cli "seed")"
 
 	# ワールドの昼夜(daytime tick)
-	# 26.1以降はtime query minecraft:day,26.1未満はtime query daytime
-	daytime_response="$(rcon-cli "time query minecraft:day" || true)"
+	# 26.1以降はtime query time(ワールドクロックの総経過tick),26.1未満はtime query daytime
+	daytime_response="$(rcon-cli "time query time" || true)"
 	daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
 
 	# 26.1以降の構文で数値が取れなければ26.1未満の構文で再取得
@@ -54,6 +54,10 @@ if [ -n "${mc_pid}" ]; then
 		world_time="取得できませんでした"
 
 	else
+
+		# 26.1以降のtime query timeは総経過tickのため24000で剰余を取る
+		# 26.1未満のdaytimeは0-23999なので影響しない
+		daytime="$(( daytime % 24000 ))"
 
 		# 1日は24000tick,0が夜明け(06:00),12000が日没(18:00)
 		mc_hour="$(( (daytime / 1000 + 6) % 24 ))"
