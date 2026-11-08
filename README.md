@@ -73,7 +73,8 @@
     - シード値(`rcon-cli "seed"`の結果)
     - ワールドの昼夜
         - `rcon-cli "time query time"`でワールドクロックの総経過tickを取得し24000で剰余を取ってdaytime tickを算出,数値が取れない場合は26.1未満用の`rcon-cli "time query daytime"`で再取得
-        - 26.1以降は`/time`コマンドがワールドクロック基準になり`time query daytime`や`time query minecraft:day`は使えないため`time query time`を使用
+        - 26.1以降は`time query daytime`が廃止されたため,ワールドクロックの総経過tickを返す`time query time`を使用
+        - 26.1以降の応答は`Clock minecraft:overworld is at <tick> tick(s)`のように末尾が単位になるため,末尾トークンではなく応答中の最後の数値トークンをdaytime tickとして抽出
         - 0以上12000未満を`昼`,12000以上24000未満を`夜`として判定(0が夜明け06:00,12000が日没18:00)
         - 判定に加えてゲーム内時刻(`HH:MM`)とdaytime tickを併記
         - どちらの構文でも数値が取得できない場合は`取得できませんでした`を表示

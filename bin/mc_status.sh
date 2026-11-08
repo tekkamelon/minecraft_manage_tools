@@ -2,6 +2,20 @@
 
 set -eu
 
+# 応答中の最後の数値トークンを抽出
+# 26.1以降のtime query timeは"... at 123 tick(s)"のように単位が付くため
+# 末尾トークンではなく数値トークンを探す
+extract_last_number() {
+	awk '
+		{
+			for (i = 1; i <= NF; i++) {
+				if ($i ~ /^[0-9]+$/) value = $i
+			}
+		}
+		END { if (value != "") print value }
+	'
+}
+
 # マイクラサーバーのプロセスIDを取得
 mc_pid="$(pgrep -f "java.*server.jar" || true)"
 
@@ -31,19 +45,19 @@ if [ -n "${mc_pid}" ]; then
 	# ワールドの昼夜(daytime tick)
 	# 26.1以降はtime query time(ワールドクロックの総経過tick),26.1未満はtime query daytime
 	daytime_response="$(rcon-cli "time query time" || true)"
-	daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
+	daytime="$(printf '%s\n' "${daytime_response}" | extract_last_number)"
 
 	# 26.1以降の構文で数値が取れなければ26.1未満の構文で再取得
 	case "${daytime}" in
 		''|*[!0-9]*)
 
 			daytime_response="$(rcon-cli "time query daytime" || true)"
-			daytime="$(printf '%s\n' "${daytime_response}" | awk 'END {print $NF}')"
+			daytime="$(printf '%s\n' "${daytime_response}" | extract_last_number)"
 
 			;;
 	esac
 
-	# 応答末尾が数値でなければ取得失敗
+	# 応答から数値が取れなければ取得失敗
 	case "${daytime}" in
 		''|*[!0-9]*) daytime="" ;;
 	esac
