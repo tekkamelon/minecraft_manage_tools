@@ -4,6 +4,7 @@ from discord.ext import commands
 import discord
 import subprocess
 import os
+from typing import Optional
 
 
 # ロール"crafter"を環境変数化
@@ -120,10 +121,23 @@ async def stop(interaction: discord.Interaction):
 
 
 # /status コマンドでサーバーの状態を取得するシェルスクリプトを起動
+# 任意引数itemで表示項目を指定(未指定は全項目表示)
 @client.tree.command(
     name="status", description="マインクラフトサーバーの状態を取得します"
 )
-async def status(interaction: discord.Interaction):
+@discord.app_commands.choices(
+    item=[
+        discord.app_commands.Choice(name="起動からの経過時間", value="uptime"),
+        discord.app_commands.Choice(name="バージョン", value="version"),
+        discord.app_commands.Choice(name="ログイン中のプレイヤー", value="player"),
+        discord.app_commands.Choice(name="シード値", value="seed"),
+        discord.app_commands.Choice(name="ワールドの昼夜", value="time"),
+    ]
+)
+async def status(
+    interaction: discord.Interaction,
+    item: Optional[discord.app_commands.Choice[str]] = None,
+):
     if not await check_minecraft_role(interaction):
         return
 
@@ -131,11 +145,15 @@ async def status(interaction: discord.Interaction):
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     user = interaction.user
 
+    # サーバー状態取得用のシェルスクリプト(指定項目は引数として渡す)
+    command = ["bash", "mc_status.sh"]
+    if item is not None:
+        command.append(item.value)
+
     try:
         # シェルスクリプトの実行結果を取得
         result = subprocess.run(
-            # サーバー状態取得用のシェルスクリプト
-            ["bash", "mc_status.sh"],
+            command,
             check=True,
             capture_output=True,
             # シェルスクリプトの実行結果をDiscordメッセージとして送信
